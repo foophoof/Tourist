@@ -1,0 +1,3 @@
+[submodule "lib/FFXIVWeather.Lumina"]
+	path = lib/FFXIVWeather.Lumina
+	url = https://github.com/reiichi001/FFXIVWeather.Lumina.git

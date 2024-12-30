@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Utility;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Tourist {
     public class PluginUi : IDisposable {
@@ -135,7 +135,7 @@ namespace Tourist {
                     .Select(adventure => (idx: adventure.RowId - first, adventure))
                     .OrderBy(entry => this.Plugin.Config.SortMode switch {
                         SortMode.Number => entry.idx,
-                        SortMode.Zone => entry.adventure.Level.Value!.Map.Row,
+                        SortMode.Zone => entry.adventure.Level.Value!.Map.RowId,
                         _ => throw new ArgumentOutOfRangeException(),
                     });
 
@@ -143,7 +143,7 @@ namespace Tourist {
                 var lastTree = false;
 
                 foreach (var (idx, adventure) in adventures) {
-                    if (this.Plugin.Config.OnlyShowCurrentZone && adventure.Level.Value!.Territory.Row != this.Plugin.ClientState.TerritoryType) {
+                    if (this.Plugin.Config.OnlyShowCurrentZone && adventure.Level.Value!.Territory.RowId != this.Plugin.ClientState.TerritoryType) {
                         continue;
                     }
 
@@ -160,13 +160,13 @@ namespace Tourist {
                     }
 
                     if (this.Plugin.Config.SortMode == SortMode.Zone) {
-                        var map = adventure.Level.Value!.Map.Value;
-                        if (lastMap != map) {
+                        var map = adventure.Level.Value!.Map.ValueNullable;
+                        if (lastMap.GetValueOrDefault().Id != map.GetValueOrDefault().Id) {
                             if (lastMap != null) {
                                 ImGui.TreePop();
                             }
 
-                            lastTree = ImGui.CollapsingHeader($"{map!.PlaceName.Value!.Name}");
+                            lastTree = ImGui.CollapsingHeader($"{map!.Value.PlaceName.Value!.Name.ExtractText()}");
                             ImGui.TreePush();
                         }
 
@@ -212,7 +212,7 @@ namespace Tourist {
                     ImGui.TextUnformatted("Command");
                     ImGui.NextColumn();
 
-                    ImGui.TextUnformatted(adventure.Emote.Value?.TextCommand.Value?.Command ?? "<unk>");
+                    ImGui.TextUnformatted(adventure.Emote.Value.TextCommand.Value.Command.ExtractText() ?? "<unk>");
                     ImGui.NextColumn();
 
                     ImGui.TextUnformatted("Eorzea time");
@@ -232,10 +232,9 @@ namespace Tourist {
                     if (Weathers.All.TryGetValue(adventure.RowId, out var weathers)) {
                         var weatherString = string.Join(", ", weathers
                             .OrderBy(id => id)
-                            .Select(id => this.Plugin.DataManager.GetExcelSheet<Weather>()!.GetRow(id))
-                            .Where(weather => weather != null)
-                            .Cast<Weather>()
-                            .Select(weather => weather.Name));
+                            .Select(id => this.Plugin.DataManager.GetExcelSheet<Weather>()!.GetRowOrDefault(id))
+                            .Where(weather => weather != null && weather.Value.RowId != 0)
+                            .Select(weather => weather!.Value.Name));
                         ImGui.TextUnformatted(weatherString);
                     } else {
                         ImGui.TextUnformatted("Any");

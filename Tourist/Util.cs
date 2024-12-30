@@ -5,18 +5,18 @@ using System.Text;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Plugin.Services;
 using FFXIVWeather.Lumina;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Tourist {
     public static class Util {
         private static Dictionary<uint, (DateTimeOffset start, DateTimeOffset end)> Availability { get; } = new();
 
         public static void OpenMapLocation(this IGameGui gameGui, Adventure adventure) {
-            var loc = adventure.Level?.Value;
-            var map = loc?.Map?.Value;
-            var terr = map?.TerritoryType?.Value;
+            var loc = adventure.Level.Value;
+            var map = loc.Map.Value;
+            var terr = map.TerritoryType.Value;
 
-            if (terr == null) {
+            if (terr.RowId == 0) {
                 return;
             }
 

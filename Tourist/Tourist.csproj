@@ -1,22 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Dalamud.NET.Sdk/11.0.0">
 
     <PropertyGroup>
         <Version>1.2.15</Version>
-        <TargetFramework>net8-windows</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev</DalamudLibPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-        <DalamudLibPath>$(DALAMUD_HOME)</DalamudLibPath>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(IsCI)' == 'true'">
@@ -24,33 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="Dalamud">
-            <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="ImGui.NET">
-            <HintPath>$(DalamudLibPath)\ImGui.NET.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="ImGuiScene">
-            <HintPath>$(DalamudLibPath)\ImGuiScene.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Lumina">
-            <HintPath>$(DalamudLibPath)\Lumina.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Lumina.Excel">
-            <HintPath>$(DalamudLibPath)\Lumina.Excel.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="DalamudPackager" Version="2.1.13" />
-        <PackageReference Include="FFXIVWeather.Lumina" Version="2.2.0" />
-        <PackageReference Include="Lumina" Version="4.1.0" PrivateAssets="all" />
-        <PackageReference Include="Lumina.Excel" Version="7.0.0" PrivateAssets="all" />
+        <ProjectReference Include="..\lib\FFXIVWeather.Lumina\FFXIVWeather.Lumina\FFXIVWeather.Lumina.csproj" />
     </ItemGroup>
 
 </Project>

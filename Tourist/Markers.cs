@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Tourist {
     public class Markers : IDisposable {
@@ -60,7 +60,7 @@ namespace Tourist {
 
                 row += 1;
 
-                if (adventure.Level.Value!.Territory.Row != territory) {
+                if (adventure.Level.Value!.Territory.RowId != territory) {
                     continue;
                 }
 
