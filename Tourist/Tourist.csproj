@@ -1,12 +1,7 @@
-<Project Sdk="Dalamud.NET.Sdk/11.0.0">
+<Project Sdk="Dalamud.NET.Sdk/12.0.2">
 
     <PropertyGroup>
         <Version>1.2.16</Version>
-        <Platforms>x64</Platforms>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(IsCI)' == 'true'">
-        <DalamudLibPath>$(HOME)/dalamud</DalamudLibPath>
     </PropertyGroup>
 
     <ItemGroup>

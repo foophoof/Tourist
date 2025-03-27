@@ -16,22 +16,22 @@ namespace Tourist {
         public Markers(Plugin plugin) {
             this.Plugin = plugin;
 
-            this.Plugin.ClientState.TerritoryChanged += this.OnTerritoryChange;
-            this.Plugin.Framework.Update += this.OnFrameworkUpdate;
+            Plugin.ClientState.TerritoryChanged += this.OnTerritoryChange;
+            Plugin.Framework.Update += this.OnFrameworkUpdate;
 
             if (this.Plugin.Config.ShowArrVistas) {
-                this.SpawnVfxForCurrentZone(this.Plugin.ClientState.TerritoryType);
+                this.SpawnVfxForCurrentZone(Plugin.ClientState.TerritoryType);
             }
         }
 
         public void Dispose() {
-            this.Plugin.Framework.Update -= this.OnFrameworkUpdate;
-            this.Plugin.ClientState.TerritoryChanged -= this.OnTerritoryChange;
+            Plugin.Framework.Update -= this.OnFrameworkUpdate;
+            Plugin.ClientState.TerritoryChanged -= this.OnTerritoryChange;
             this.RemoveAllVfx();
         }
 
         internal void RemoveVfx(ushort index) {
-            var adventure = this.Plugin.DataManager.GetExcelSheet<Adventure>()!
+            var adventure = Plugin.DataManager.GetExcelSheet<Adventure>()!
                 .Skip(index)
                 .First();
 
@@ -53,7 +53,7 @@ namespace Tourist {
 
         internal void SpawnVfxForCurrentZone(ushort territory) {
             var row = 0;
-            foreach (var adventure in this.Plugin.DataManager.GetExcelSheet<Adventure>()!) {
+            foreach (var adventure in Plugin.DataManager.GetExcelSheet<Adventure>()!) {
                 if (row >= 80) {
                     break;
                 }

@@ -21,7 +21,7 @@ namespace Tourist {
         }
 
         internal void Save() {
-            this.Plugin.Interface.SavePluginConfig(this);
+            Plugin.Interface.SavePluginConfig(this);
         }
     }
 

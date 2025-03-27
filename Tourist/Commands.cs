@@ -8,13 +8,13 @@ namespace Tourist {
         public Commands(Plugin plugin) {
             this.Plugin = plugin;
 
-            this.Plugin.CommandManager.AddHandler("/tourist", new CommandInfo(this.OnCommand) {
+            Plugin.CommandManager.AddHandler("/tourist", new CommandInfo(this.OnCommand) {
                 HelpMessage = "Opens the Tourist interface",
             });
         }
 
         public void Dispose() {
-            this.Plugin.CommandManager.RemoveHandler("/tourist");
+            Plugin.CommandManager.RemoveHandler("/tourist");
         }
 
         private void OnCommand(string command, string arguments) {

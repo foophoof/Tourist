@@ -2,6 +2,7 @@
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVWeather.Lumina;
 
 namespace Tourist {
@@ -10,31 +11,31 @@ namespace Tourist {
         public static string Name => "Tourist";
 
         [PluginService]
-        internal static IPluginLog Log { get; private set; } = null!;
+        public static IPluginLog Log { get; private set; } = null!;
 
         [PluginService]
-        internal IDalamudPluginInterface Interface { get; init; }
+        internal static IDalamudPluginInterface Interface { get; private set; }
 
         [PluginService]
-        internal IClientState ClientState { get; init; } = null!;
+        internal static IClientState ClientState { get; private set; } = null!;
 
         [PluginService]
-        internal ICommandManager CommandManager { get; init; } = null!;
+        internal static ICommandManager CommandManager { get; private set; } = null!;
 
         [PluginService]
-        internal IDataManager DataManager { get; init; } = null!;
+        internal static IDataManager DataManager { get; private set; } = null!;
 
         [PluginService]
-        internal IFramework Framework { get; init; } = null!;
+        internal static IFramework Framework { get; private set; } = null!;
 
         [PluginService]
-        internal IGameGui GameGui { get; init; } = null!;
+        internal static IGameGui GameGui { get; private set; } = null!;
 
         [PluginService]
-        internal ISigScanner SigScanner { get; init; } = null!;
+        internal static ISigScanner SigScanner { get; private set; } = null!;
 
         [PluginService]
-        internal IGameInteropProvider GameInteropProvider { get; init; } = null!;
+        internal static IGameInteropProvider GameInteropProvider { get; private set; } = null!;
 
         internal Configuration Config { get; }
         internal PluginUi Ui { get; }
@@ -44,12 +45,12 @@ namespace Tourist {
         internal Markers Markers { get; }
 
         public Plugin(IDalamudPluginInterface pluginInterface) {
-            this.Interface = pluginInterface;
+            Interface = pluginInterface;
 
-            this.Config = this.Interface.GetPluginConfig() as Configuration ?? new Configuration();
+            this.Config = Interface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Config.Initialise(this);
 
-            this.Weather = new FFXIVWeatherLuminaService(this.DataManager.GameData);
+            this.Weather = new FFXIVWeatherLuminaService(DataManager.GameData);
 
             this.Functions = new GameFunctions(this);
 

@@ -19,13 +19,13 @@ namespace Tourist {
         public PluginUi(Plugin plugin) {
             this.Plugin = plugin;
 
-            this.Plugin.Interface.UiBuilder.Draw += this.Draw;
-            this.Plugin.Interface.UiBuilder.OpenConfigUi += this.OpenConfig;
+            Plugin.Interface.UiBuilder.Draw += this.Draw;
+            Plugin.Interface.UiBuilder.OpenConfigUi += this.OpenConfig;
         }
 
         public void Dispose() {
-            this.Plugin.Interface.UiBuilder.OpenConfigUi -= this.OpenConfig;
-            this.Plugin.Interface.UiBuilder.Draw -= this.Draw;
+            Plugin.Interface.UiBuilder.OpenConfigUi -= this.OpenConfig;
+            Plugin.Interface.UiBuilder.Draw -= this.Draw;
         }
 
         private void OpenConfig() {
@@ -103,7 +103,7 @@ namespace Tourist {
                         this.Plugin.Config.Save();
 
                         if (showArrVistas) {
-                            var territory = this.Plugin.ClientState.TerritoryType;
+                            var territory = Plugin.ClientState.TerritoryType;
                             this.Plugin.Markers.SpawnVfxForCurrentZone(territory);
                         } else {
                             this.Plugin.Markers.RemoveAllVfx();
@@ -131,7 +131,7 @@ namespace Tourist {
             if (ImGui.BeginChild("tourist-adventures", new Vector2(0, 0))) {
                 const uint first = 2162688;
 
-                var adventures = this.Plugin.DataManager.GetExcelSheet<Adventure>()!
+                var adventures = Plugin.DataManager.GetExcelSheet<Adventure>()!
                     .Select(adventure => (idx: adventure.RowId - first, adventure))
                     .OrderBy(entry => this.Plugin.Config.SortMode switch {
                         SortMode.Number => entry.idx,
@@ -143,7 +143,7 @@ namespace Tourist {
                 var lastTree = false;
 
                 foreach (var (idx, adventure) in adventures) {
-                    if (this.Plugin.Config.OnlyShowCurrentZone && adventure.Level.Value!.Territory.RowId != this.Plugin.ClientState.TerritoryType) {
+                    if (this.Plugin.Config.OnlyShowCurrentZone && adventure.Level.Value!.Territory.RowId != Plugin.ClientState.TerritoryType) {
                         continue;
                     }
 
@@ -232,7 +232,7 @@ namespace Tourist {
                     if (Weathers.All.TryGetValue(adventure.RowId, out var weathers)) {
                         var weatherString = string.Join(", ", weathers
                             .OrderBy(id => id)
-                            .Select(id => this.Plugin.DataManager.GetExcelSheet<Weather>()!.GetRowOrDefault(id))
+                            .Select(id => Plugin.DataManager.GetExcelSheet<Weather>()!.GetRowOrDefault(id))
                             .Where(weather => weather != null && weather.Value.RowId != 0)
                             .Select(weather => weather!.Value.Name));
                         ImGui.TextUnformatted(weatherString);
@@ -243,7 +243,7 @@ namespace Tourist {
                     ImGui.Columns();
 
                     if (ImGui.Button($"Open map##{adventure.RowId}")) {
-                        this.Plugin.GameGui.OpenMapLocation(adventure);
+                        Plugin.GameGui.OpenMapLocation(adventure);
                     }
                 }
 
