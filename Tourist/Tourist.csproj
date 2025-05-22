@@ -2,10 +2,13 @@
 
     <PropertyGroup>
         <Version>1.2.17</Version>
+        <PackageLicenseExpression>EUPL-1.2</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\lib\FFXIVWeather.Lumina\FFXIVWeather.Lumina\FFXIVWeather.Lumina.csproj" />
+        <PackageReference Include="DalaMock.Host" Version="2.2.5"/>
+        <PackageReference Include="DalaMock.Shared" Version="2.2.6"/>
+        <PackageReference Include="FFXIVWeather.Lumina" Version="2.3.0"/>
     </ItemGroup>
 
 </Project>

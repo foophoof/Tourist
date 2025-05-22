@@ -1,71 +1,87 @@
-﻿using Dalamud.Game;
-using Dalamud.IoC;
+﻿using Autofac;
+using DalaMock.Host.Hosting;
+using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVWeather.Lumina;
+using Lumina;
+using Lumina.Excel;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Tourist.Services;
+using Tourist.Windows;
 
-namespace Tourist {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class Plugin : IDalamudPlugin {
-        public static string Name => "Tourist";
+namespace Tourist;
 
-        [PluginService]
-        public static IPluginLog Log { get; private set; } = null!;
-
-        [PluginService]
-        internal static IDalamudPluginInterface Interface { get; private set; }
-
-        [PluginService]
-        internal static IClientState ClientState { get; private set; } = null!;
-
-        [PluginService]
-        internal static ICommandManager CommandManager { get; private set; } = null!;
-
-        [PluginService]
-        internal static IDataManager DataManager { get; private set; } = null!;
-
-        [PluginService]
-        internal static IFramework Framework { get; private set; } = null!;
-
-        [PluginService]
-        internal static IGameGui GameGui { get; private set; } = null!;
-
-        [PluginService]
-        internal static ISigScanner SigScanner { get; private set; } = null!;
-
-        [PluginService]
-        internal static IGameInteropProvider GameInteropProvider { get; private set; } = null!;
-
-        internal Configuration Config { get; }
-        internal PluginUi Ui { get; }
-        internal FFXIVWeatherLuminaService Weather { get; }
-        internal GameFunctions Functions { get; }
-        private Commands Commands { get; }
-        internal Markers Markers { get; }
-
-        public Plugin(IDalamudPluginInterface pluginInterface) {
-            Interface = pluginInterface;
-
-            this.Config = Interface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Config.Initialise(this);
-
-            this.Weather = new FFXIVWeatherLuminaService(DataManager.GameData);
-
-            this.Functions = new GameFunctions(this);
-
-            this.Markers = new Markers(this);
-
-            this.Ui = new PluginUi(this);
-
-            this.Commands = new Commands(this);
-        }
-
-        public void Dispose() {
-            this.Commands.Dispose();
-            this.Ui.Dispose();
-            this.Markers.Dispose();
-            this.Functions.Dispose();
-        }
+[SuppressMessage("ReSharper", "UnusedType.Global")]
+public sealed class Plugin : HostedPlugin
+{
+    public Plugin(
+        IDalamudPluginInterface pluginInterface,
+        IPluginLog pluginLog,
+        IDataManager dataManager,
+        ICommandManager commandManager,
+        IClientState clientState,
+        IGameGui gameGui,
+        IFramework framework,
+        IGameInteropProvider gameInteropProvider)
+        : base(
+            pluginInterface,
+            pluginLog,
+            dataManager,
+            commandManager,
+            clientState,
+            gameGui,
+            framework,
+            gameInteropProvider)
+    {
+        CreateHost();
+        Start();
     }
+
+    private List<Type> HostedServices { get; } =
+    [
+        typeof(CommandService),
+        typeof(ConfigurationLoaderService),
+        typeof(InstallerWindowService),
+        typeof(MarkerService),
+        typeof(VfxService),
+        typeof(VistaUnlockedListenerService),
+        typeof(WindowService),
+    ];
+
+    public override void ConfigureContainer(ContainerBuilder containerBuilder)
+    {
+        foreach (var hostedService in HostedServices)
+        {
+            containerBuilder.RegisterType(hostedService).AsSelf().AsImplementedInterfaces().SingleInstance();
+        }
+
+        containerBuilder.Register(c => c.Resolve<IDataManager>().GameData).SingleInstance();
+        containerBuilder.Register(c => new FFXIVWeatherLuminaService(c.Resolve<GameData>()));
+
+        containerBuilder.RegisterType<MainWindow>().As<Window>().AsSelf().SingleInstance();
+
+
+        // Sheets
+        containerBuilder.RegisterGeneric((context, parameters) =>
+            {
+                var gameData = context.Resolve<GameData>();
+                var method = typeof(GameData).GetMethod(nameof(GameData.GetExcelSheet))
+                    ?.MakeGenericMethod(parameters);
+                var sheet = method!.Invoke(gameData, [null, null])!;
+                return sheet;
+            })
+            .As(typeof(ExcelSheet<>));
+
+        containerBuilder.Register(s =>
+        {
+            var configurationLoaderService = s.Resolve<ConfigurationLoaderService>();
+            return configurationLoaderService.GetPluginConfig();
+        }).SingleInstance();
+    }
+
+    public override void ConfigureServices(IServiceCollection serviceCollection)
+    { }
 }

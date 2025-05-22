@@ -1,5 +1,5 @@
 ﻿name: Tourist
-author: Anna
+author: Anna, maintained by foophoof
 punchline: Finish your sightseeing log.
 description: |-
   Tourist adds a window to assist with the sightseeing log.
@@ -10,5 +10,11 @@ description: |-
   - Hide already completed or unavailable vistas
   - Show the command needed for each vista
 
-  Icon: sightseeing by muhammad from the Noun Project
-repo_url: https://git.anna.lgbt/anna/Tourist
+  "sightseeing" icon by muhammad, from thenounproject.com CC BY 3.0
+repo_url: https://github.com/foophoof/Tourist/
+tags:
+  - Utility
+  - Sightseeing
+  - Log
+  - Vista
+  - Completion
