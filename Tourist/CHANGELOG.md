@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+> [!NOTE]
+> The changelog is not immutable, and sometimes the changelog might be improved after the release is cut, so it's recommended to check the [changelog on main](https://github.com/foophoof/Tourist/blob/main/Tourist/CHANGELOG.md) or in [the corresponding GitHub release](https://github.com/foophoof/Tourist/releases).
+
 ## [Unreleased]
 
 ## [1.12.1.0] - 2025-05-22
+
+### Fixed
+- Grouping by zone is fixed
 
 ### Changed
 
