@@ -20,6 +20,16 @@
         "resolved": "1.2.25",
         "contentHash": "xCXiw7BCxHJ8pF6wPepRUddlh2dlQlbr81gXA72hdk4FLHkKXas7EH/n+fk5UCA/YfMqG1Z6XaPiUjDbUNBUzg=="
       },
+      "FFXIVWeather.Lumina": {
+        "type": "Direct",
+        "requested": "[2.3.0, )",
+        "resolved": "2.3.0",
+        "contentHash": "36W4dYrHTysUcliRpyQ58q7CoHyZu8OyUFEWBKWx4XPWNIF6YXAT3ayBzAHQbRdaeO34g4/brRCx7QNSHKqFWg==",
+        "dependencies": {
+          "Lumina": "5.6.1",
+          "Lumina.Excel": "7.2.0"
+        }
+      },
       "Injectio": {
         "type": "Direct",
         "requested": "[4.1.0, )",
@@ -334,22 +344,6 @@
         "type": "Transitive",
         "resolved": "9.0.3",
         "contentHash": "0nDJBZ06DVdTG2vvCZ4XjazLVaFawdT0pnji23ISX8I8fEOlRJyzH2I0kWiAbCtFwry2Zir4qE4l/GStLATfFw=="
-      },
-      "ffxivclientstructs": {
-        "type": "Project",
-        "dependencies": {
-          "InteropGenerator.Runtime": "[1.0.0, )"
-        }
-      },
-      "ffxivweather.lumina": {
-        "type": "Project",
-        "dependencies": {
-          "Lumina": "[5.6.1, )",
-          "Lumina.Excel": "[7.2.0, )"
-        }
-      },
-      "interopgenerator.runtime": {
-        "type": "Project"
       }
     }
   }
