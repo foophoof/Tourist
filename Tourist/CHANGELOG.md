@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.12.1.0] - 2025-05-22
+
 ### Changed
 
 - Rewrote plugin to use more modern APIs and ways of doing things. Functionality and UI should remain the same.
+- Changed versioning strategy, the second part of the version number will be the API version going forward (i.e. 1.12.x.y are the versions for API12).
 
 ## [1.2.17.0] - 2025-03-27
 
@@ -138,7 +141,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Initial release
 
-[unreleased]: https://github.com/foophoof/Tourist/compare/v1.2.17...main
+[unreleased]: https://github.com/foophoof/Tourist/compare/v1.12.1.0...main
+[1.12.1.0]: https://github.com/foophoof/Tourist/compare/v1.2.17...v1.12.1.0
 [1.2.17.0]: https://github.com/foophoof/Tourist/compare/v1.2.16...v1.2.17
 [1.2.16.0]: https://github.com/foophoof/Tourist/compare/v1.2.15...v1.2.16
 [1.2.15.0]: https://github.com/foophoof/Tourist/compare/v1.2.14...v1.2.15
