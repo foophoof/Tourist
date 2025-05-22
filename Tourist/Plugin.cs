@@ -1,71 +1,80 @@
-﻿using Dalamud.Game;
-using Dalamud.IoC;
+﻿using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVWeather.Lumina;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
+using Tourist.Config;
+using Tourist.Services;
+using Tourist.Windows;
 
-namespace Tourist {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class Plugin : IDalamudPlugin {
-        public static string Name => "Tourist";
+namespace Tourist;
 
-        [PluginService]
-        public static IPluginLog Log { get; private set; } = null!;
+[SuppressMessage("ReSharper", "UnusedType.Global")]
+public sealed class Plugin : IDalamudPlugin
+{
+    private readonly IHost _host;
 
-        [PluginService]
-        internal static IDalamudPluginInterface Interface { get; private set; }
+    public Plugin(
+        IDalamudPluginInterface pluginInterface,
+        IDataManager dataManager,
+        ICommandManager commandManager,
+        IPluginLog pluginLog,
+        IClientState clientState,
+        IGameGui gameGui,
+        IFramework framework,
+        IGameInteropProvider gameInteropProvider)
+    {
+        _host = new HostBuilder()
+            .UseContentRoot(pluginInterface.ConfigDirectory.FullName)
+            .ConfigureLogging(lb =>
+            {
+                lb.ClearProviders();
+                lb.SetMinimumLevel(LogLevel.Trace);
+            })
+            .ConfigureServices(collection =>
+            {
+                collection.AddSingleton(pluginInterface);
+                collection.AddSingleton(dataManager);
+                collection.AddSingleton(commandManager);
+                collection.AddSingleton(pluginLog);
+                collection.AddSingleton(clientState);
+                collection.AddSingleton(gameGui);
+                collection.AddSingleton(framework);
+                collection.AddSingleton(gameInteropProvider);
+                collection.AddSingleton<WindowService>();
+                collection.AddSingleton<InstallerWindowService>();
+                collection.AddSingleton<CommandService>();
+                collection.AddSingleton<VfxService>();
+                collection.AddSingleton<MarkerService>();
+                collection.AddSingleton<VistaUnlockedListenerService>();
+                collection.AddSingleton<MainWindow>();
 
-        [PluginService]
-        internal static IClientState ClientState { get; private set; } = null!;
+                collection.AddSingleton<Window>(provider => provider.GetRequiredService<MainWindow>());
 
-        [PluginService]
-        internal static ICommandManager CommandManager { get; private set; } = null!;
+                collection.AddSingleton(s => new FFXIVWeatherLuminaService(s.GetRequiredService<IDataManager>().GameData));
 
-        [PluginService]
-        internal static IDataManager DataManager { get; private set; } = null!;
+                collection.AddSingleton(PluginConfig.Load);
 
-        [PluginService]
-        internal static IFramework Framework { get; private set; } = null!;
+                collection.AddSingleton(new WindowSystem("Tourist"));
 
-        [PluginService]
-        internal static IGameGui GameGui { get; private set; } = null!;
+                collection.AddHostedService(p => p.GetRequiredService<WindowService>());
+                collection.AddHostedService(p => p.GetRequiredService<CommandService>());
+                collection.AddHostedService(p => p.GetRequiredService<InstallerWindowService>());
+                collection.AddHostedService(p => p.GetRequiredService<VfxService>());
+                collection.AddHostedService(p => p.GetRequiredService<VistaUnlockedListenerService>());
+                collection.AddHostedService(p => p.GetRequiredService<MarkerService>());
+            })
+            .Build();
 
-        [PluginService]
-        internal static ISigScanner SigScanner { get; private set; } = null!;
+        _ = _host.StartAsync();
+    }
 
-        [PluginService]
-        internal static IGameInteropProvider GameInteropProvider { get; private set; } = null!;
-
-        internal Configuration Config { get; }
-        internal PluginUi Ui { get; }
-        internal FFXIVWeatherLuminaService Weather { get; }
-        internal GameFunctions Functions { get; }
-        private Commands Commands { get; }
-        internal Markers Markers { get; }
-
-        public Plugin(IDalamudPluginInterface pluginInterface) {
-            Interface = pluginInterface;
-
-            this.Config = Interface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Config.Initialise(this);
-
-            this.Weather = new FFXIVWeatherLuminaService(DataManager.GameData);
-
-            this.Functions = new GameFunctions(this);
-
-            this.Markers = new Markers(this);
-
-            this.Ui = new PluginUi(this);
-
-            this.Commands = new Commands(this);
-        }
-
-        public void Dispose() {
-            this.Commands.Dispose();
-            this.Ui.Dispose();
-            this.Markers.Dispose();
-            this.Functions.Dispose();
-        }
+    void IDisposable.Dispose()
+    {
+        _host.StopAsync().GetAwaiter().GetResult();
+        _host.Dispose();
     }
 }
