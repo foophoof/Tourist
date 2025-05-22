@@ -26,21 +26,22 @@ public sealed class Plugin : HostedPlugin
         IGameGui gameGui,
         IFramework framework,
         IGameInteropProvider gameInteropProvider)
-    : base(
-        pluginInterface,
-        pluginLog,
-        dataManager,
-        commandManager,
-        clientState,
-        gameGui,
-        framework,
-        gameInteropProvider)
+        : base(
+            pluginInterface,
+            pluginLog,
+            dataManager,
+            commandManager,
+            clientState,
+            gameGui,
+            framework,
+            gameInteropProvider)
     {
         CreateHost();
         Start();
     }
 
-    private List<Type> HostedServices { get; } = [
+    private List<Type> HostedServices { get; } =
+    [
         typeof(CommandService),
         typeof(ConfigurationLoaderService),
         typeof(InstallerWindowService),
@@ -82,6 +83,5 @@ public sealed class Plugin : HostedPlugin
     }
 
     public override void ConfigureServices(IServiceCollection serviceCollection)
-    {
-    }
+    { }
 }

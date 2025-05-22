@@ -18,14 +18,14 @@ namespace Tourist.Windows;
 
 public sealed class MainWindow : Window, IDisposable
 {
+    private readonly ExcelSheet<Adventure> _adventureSheet;
     private readonly IClientState _clientState;
+    private readonly ConfigurationLoaderService _configurationLoaderService;
     private readonly IDataManager _dataManager;
     private readonly IGameGui _gameGui;
     private readonly MarkerService _markerService;
     private readonly PluginConfig _pluginConfig;
-    private readonly ConfigurationLoaderService _configurationLoaderService;
     private readonly FFXIVWeatherLuminaService _weatherLuminaService;
-    private readonly ExcelSheet<Adventure> _adventureSheet;
     private readonly ExcelSheet<Weather> _weatherSheet;
 
     public MainWindow(
