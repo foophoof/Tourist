@@ -5,6 +5,7 @@ using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVWeather.Lumina;
 using ImGuiNET;
+using Lumina.Excel;
 using Lumina.Excel.Sheets;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,10 @@ public sealed class MainWindow : Window, IDisposable
     private readonly IGameGui _gameGui;
     private readonly MarkerService _markerService;
     private readonly PluginConfig _pluginConfig;
+    private readonly ConfigurationLoaderService _configurationLoaderService;
     private readonly FFXIVWeatherLuminaService _weatherLuminaService;
+    private readonly ExcelSheet<Adventure> _adventureSheet;
+    private readonly ExcelSheet<Weather> _weatherSheet;
 
     public MainWindow(
         IClientState clientState,
@@ -30,7 +34,10 @@ public sealed class MainWindow : Window, IDisposable
         IGameGui gameGui,
         MarkerService markerService,
         PluginConfig pluginConfig,
-        FFXIVWeatherLuminaService weatherLuminaService) : base("Tourist##MainWindow", ImGuiWindowFlags.MenuBar)
+        FFXIVWeatherLuminaService weatherLuminaService,
+        ConfigurationLoaderService configurationLoaderService,
+        ExcelSheet<Adventure> adventureSheet,
+        ExcelSheet<Weather> weatherSheet) : base("Tourist##MainWindow", ImGuiWindowFlags.MenuBar)
     {
         _dataManager = dataManager;
         _pluginConfig = pluginConfig;
@@ -38,6 +45,9 @@ public sealed class MainWindow : Window, IDisposable
         _gameGui = gameGui;
         _weatherLuminaService = weatherLuminaService;
         _markerService = markerService;
+        _configurationLoaderService = configurationLoaderService;
+        _adventureSheet = adventureSheet;
+        _weatherSheet = weatherSheet;
 
         Size = new Vector2(350, 450);
         SizeCondition = ImGuiCond.FirstUseEver;
@@ -104,7 +114,7 @@ public sealed class MainWindow : Window, IDisposable
                 continue;
 
             _pluginConfig.SortMode = mode;
-            _pluginConfig.Save();
+            _configurationLoaderService.Save();
         }
     }
 
@@ -114,23 +124,43 @@ public sealed class MainWindow : Window, IDisposable
         if (!menu)
             return;
 
-        if (ImGui.MenuItem("Show time until available", null, ref _pluginConfig.ShowTimeUntilAvailable))
-            _pluginConfig.Save();
+        var showTimeUntilAvailable = _pluginConfig.ShowTimeUntilAvailable;
+        if (ImGui.MenuItem("Show time until available", null, ref showTimeUntilAvailable))
+        {
+            _pluginConfig.ShowTimeUntilAvailable = showTimeUntilAvailable;
+            _configurationLoaderService.Save();
+        }
 
-        if (ImGui.MenuItem("Show time left", null, ref _pluginConfig.ShowTimeLeft))
-            _pluginConfig.Save();
+        var showTimeLeft = _pluginConfig.ShowTimeLeft;
+        if (ImGui.MenuItem("Show time left", null, ref showTimeLeft))
+        {
+            _pluginConfig.ShowTimeLeft = showTimeLeft;
+            _configurationLoaderService.Save();
+        }
     }
 
     private void DrawVisibilityMenu()
     {
-        if (ImGui.MenuItem("Show finished", null, ref _pluginConfig.ShowFinished))
-            _pluginConfig.Save();
+        var showFinished = _pluginConfig.ShowFinished;
+        if (ImGui.MenuItem("Show finished", null, ref showFinished))
+        {
+            _pluginConfig.ShowFinished = showFinished;
+            _configurationLoaderService.Save();
+        }
 
-        if (ImGui.MenuItem("Show unavailable", null, ref _pluginConfig.ShowUnavailable))
-            _pluginConfig.Save();
+        var showUnavailable = _pluginConfig.ShowUnavailable;
+        if (ImGui.MenuItem("Show unavailable", null, ref showUnavailable))
+        {
+            _pluginConfig.ShowUnavailable = showUnavailable;
+            _configurationLoaderService.Save();
+        }
 
-        if (ImGui.MenuItem("Show current zone only", null, ref _pluginConfig.OnlyShowCurrentZone))
-            _pluginConfig.Save();
+        var onlyShowCurrentZone = _pluginConfig.OnlyShowCurrentZone;
+        if (ImGui.MenuItem("Show current zone only", null, ref onlyShowCurrentZone))
+        {
+            _pluginConfig.OnlyShowCurrentZone = onlyShowCurrentZone;
+            _configurationLoaderService.Save();
+        }
     }
 
     private void DrawArrVistasMenuItem()
@@ -140,7 +170,7 @@ public sealed class MainWindow : Window, IDisposable
             return;
 
         _pluginConfig.ShowArrVistas = showArrVistas;
-        _pluginConfig.Save();
+        _configurationLoaderService.Save();
 
         if (showArrVistas)
         {
@@ -255,7 +285,7 @@ public sealed class MainWindow : Window, IDisposable
     {
         var weatherString = string.Join(", ", weathers
             .OrderBy(id => id)
-            .Select(id => _dataManager.GetExcelSheet<Weather>().GetRowOrDefault(id))
+            .Select(id => _weatherSheet.GetRowOrDefault(id))
             .Where(weather => weather.HasValue && weather.Value.RowId != 0)
             .Select(weather => weather!.Value.Name));
         return weatherString;
@@ -263,7 +293,7 @@ public sealed class MainWindow : Window, IDisposable
 
     private IEnumerable<IGrouping<uint, (Adventure row, int idx)>> GetAdventures()
     {
-        return _dataManager.GetExcelSheet<Adventure>()
+        return _adventureSheet
             .Select((row, idx) => (row, idx))
             .OrderBy(entry => _pluginConfig.SortMode switch
             {

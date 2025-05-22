@@ -1,4 +1,6 @@
-﻿using Dalamud.Interface.Windowing;
+﻿using DalaMock.Host.Factories;
+using DalaMock.Shared.Interfaces;
+using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
@@ -7,14 +9,18 @@ using System.Threading.Tasks;
 
 namespace Tourist.Services;
 
-public class WindowService(IDalamudPluginInterface pluginInterface, IEnumerable<Window> pluginWindows, WindowSystem windowSystem) : IHostedService
+public class WindowService(
+    IDalamudPluginInterface pluginInterface,
+    IEnumerable<Window> pluginWindows,
+    IWindowSystemFactory windowSystemFactory) : IHostedService
 {
+    private IWindowSystem WindowSystem { get; } = windowSystemFactory.Create("Tourist");
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
         foreach (var pluginWindow in pluginWindows)
         {
-            windowSystem.AddWindow(pluginWindow);
+            WindowSystem.AddWindow(pluginWindow);
         }
 
         pluginInterface.UiBuilder.Draw += UiBuilderOnDraw;
@@ -26,13 +32,13 @@ public class WindowService(IDalamudPluginInterface pluginInterface, IEnumerable<
     {
         pluginInterface.UiBuilder.Draw -= UiBuilderOnDraw;
 
-        windowSystem.RemoveAllWindows();
+        WindowSystem.RemoveAllWindows();
 
         return Task.CompletedTask;
     }
 
     private void UiBuilderOnDraw()
     {
-        windowSystem.Draw();
+        WindowSystem.Draw();
     }
 }

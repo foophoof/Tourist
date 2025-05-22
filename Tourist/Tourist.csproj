@@ -6,11 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoCtor" Version="2.5.2"/>
+        <PackageReference Include="DalaMock.Host" Version="2.2.5" />
+        <PackageReference Include="DalaMock.Shared" Version="2.2.6" />
         <PackageReference Include="FFXIVWeather.Lumina" Version="2.3.0" />
-        <PackageReference Include="Injectio" Version="4.1.0"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3"/>
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.3"/>
     </ItemGroup>
 
 </Project>
