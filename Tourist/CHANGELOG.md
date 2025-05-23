@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.12.1.1] - 2025-05-23
+
 ### Fixed
 - Remove correct ARR vista marker when a vista is completed.
 
@@ -150,7 +152,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Initial release
 
-[unreleased]: https://github.com/foophoof/Tourist/compare/v1.12.1.0...main
+[unreleased]: https://github.com/foophoof/Tourist/compare/v1.12.1.1...main
+[1.12.1.1]: https://github.com/foophoof/Tourist/compare/v1.12.1.0...v1.12.1.1
 [1.12.1.0]: https://github.com/foophoof/Tourist/compare/v1.2.17...v1.12.1.0
 [1.2.17.0]: https://github.com/foophoof/Tourist/compare/v1.2.16...v1.2.17
 [1.2.16.0]: https://github.com/foophoof/Tourist/compare/v1.2.15...v1.2.16
