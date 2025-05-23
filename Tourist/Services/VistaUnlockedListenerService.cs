@@ -36,8 +36,8 @@ public class VistaUnlockedListenerService(IGameInteropProvider gameInteropProvid
     {
         try
         {
-            pluginLog.Info($"Vista {index} completed, removing VFX");
-            vfxService.QueueRemove(index);
+            pluginLog.Info($"Vista {index + 1} completed, removing VFX");
+            vfxService.QueueRemove((ushort)(index + 1));
         }
         catch (Exception ex)
         {
