@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- Remove correct ARR vista marker when a vista is completed.
+
 ## [1.12.1.0] - 2025-05-22
 
 ### Fixed
