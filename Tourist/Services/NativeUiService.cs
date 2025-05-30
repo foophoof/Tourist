@@ -23,13 +23,15 @@ public class NativeUiService(IDalamudPluginInterface pluginInterface, IFramework
             Title = "Tourist",
             Size = new Vector2(350.0f, 450.0f),
         };
-        _addonTourist.Open(_nativeController);
+        pluginInterface.UiBuilder.OpenMainUi += OpenUI;
     }
 
     // Must be called on framework thread
     private void DisposeThings()
     {
         ThreadSafety.AssertMainThread();
+
+        pluginInterface.UiBuilder.OpenMainUi -= OpenUI;
 
         pluginLog.Info("Disposing Native UI stuff, on main thread");
         if (_addonTourist is null)
@@ -44,10 +46,20 @@ public class NativeUiService(IDalamudPluginInterface pluginInterface, IFramework
         _addonTourist?.Dispose();
         _nativeController?.Dispose();
         pluginLog.Info("Done disposing Native UI stuff");
+
+        // _addonTourist = null;
+        // _nativeController = null;
     }
 
     internal void Cleanup()
     {
         DisposeThings();
+    }
+
+    private void OpenUI()
+    {
+        if (_nativeController is null)
+            return;
+        _addonTourist?.Open(_nativeController);
     }
 }
