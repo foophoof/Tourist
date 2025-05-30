@@ -4,11 +4,14 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVWeather.Lumina;
+using KamiToolKit;
 using Lumina;
 using Lumina.Excel;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using Tourist.Addons;
 using Tourist.Services;
 using Tourist.Windows;
 
@@ -46,6 +49,7 @@ public sealed class Plugin : HostedPlugin
         typeof(ConfigurationLoaderService),
         typeof(InstallerWindowService),
         typeof(MarkerService),
+        typeof(NativeUiService),
         typeof(VfxService),
         typeof(VistaUnlockedListenerService),
         typeof(WindowService),
@@ -63,6 +67,14 @@ public sealed class Plugin : HostedPlugin
 
         containerBuilder.RegisterType<MainWindow>().As<Window>().AsSelf().SingleInstance();
 
+        // containerBuilder.RegisterType<NativeController>().AsSelf().SingleInstance();
+        // containerBuilder
+        //     .RegisterType<AddonTourist>()
+        //     .WithProperty("InternalName", "Tourist")
+        //     .WithProperty("Title", "Tourist")
+        //     .WithProperty("Size", new Vector2(350.0f, 450.0f))
+        //     .AsSelf()
+        //     .SingleInstance();
 
         // Sheets
         containerBuilder.RegisterGeneric((context, parameters) =>
