@@ -84,4 +84,10 @@ public sealed class Plugin : HostedPlugin
 
     public override void ConfigureServices(IServiceCollection serviceCollection)
     { }
+
+
+    public override HostedPluginOptions ConfigureOptions()
+    {
+        return new HostedPluginOptions();
+    }
 }
