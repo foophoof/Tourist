@@ -4,7 +4,7 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVWeather.Lumina;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
 using System.Collections.Generic;
@@ -110,7 +110,7 @@ public sealed class MainWindow : Window, IDisposable
 
         foreach (var mode in Enum.GetValues<SortMode>())
         {
-            if (!ImGui.MenuItem($"{mode}", null, _pluginConfig.SortMode == mode))
+            if (!ImGui.MenuItem($"{mode}", _pluginConfig.SortMode == mode))
                 continue;
 
             _pluginConfig.SortMode = mode;
@@ -125,14 +125,14 @@ public sealed class MainWindow : Window, IDisposable
             return;
 
         var showTimeUntilAvailable = _pluginConfig.ShowTimeUntilAvailable;
-        if (ImGui.MenuItem("Show time until available", null, ref showTimeUntilAvailable))
+        if (ImGui.MenuItem("Show time until available", ref showTimeUntilAvailable))
         {
             _pluginConfig.ShowTimeUntilAvailable = showTimeUntilAvailable;
             _configurationLoaderService.Save();
         }
 
         var showTimeLeft = _pluginConfig.ShowTimeLeft;
-        if (ImGui.MenuItem("Show time left", null, ref showTimeLeft))
+        if (ImGui.MenuItem("Show time left", ref showTimeLeft))
         {
             _pluginConfig.ShowTimeLeft = showTimeLeft;
             _configurationLoaderService.Save();
@@ -142,21 +142,21 @@ public sealed class MainWindow : Window, IDisposable
     private void DrawVisibilityMenu()
     {
         var showFinished = _pluginConfig.ShowFinished;
-        if (ImGui.MenuItem("Show finished", null, ref showFinished))
+        if (ImGui.MenuItem("Show finished", ref showFinished))
         {
             _pluginConfig.ShowFinished = showFinished;
             _configurationLoaderService.Save();
         }
 
         var showUnavailable = _pluginConfig.ShowUnavailable;
-        if (ImGui.MenuItem("Show unavailable", null, ref showUnavailable))
+        if (ImGui.MenuItem("Show unavailable", ref showUnavailable))
         {
             _pluginConfig.ShowUnavailable = showUnavailable;
             _configurationLoaderService.Save();
         }
 
         var onlyShowCurrentZone = _pluginConfig.OnlyShowCurrentZone;
-        if (ImGui.MenuItem("Show current zone only", null, ref onlyShowCurrentZone))
+        if (ImGui.MenuItem("Show current zone only", ref onlyShowCurrentZone))
         {
             _pluginConfig.OnlyShowCurrentZone = onlyShowCurrentZone;
             _configurationLoaderService.Save();
@@ -166,7 +166,7 @@ public sealed class MainWindow : Window, IDisposable
     private void DrawArrVistasMenuItem()
     {
         var showArrVistas = _pluginConfig.ShowArrVistas;
-        if (!ImGui.MenuItem("Add markers for ARR vistas", null, ref showArrVistas))
+        if (!ImGui.MenuItem("Add markers for ARR vistas", ref showArrVistas))
             return;
 
         _pluginConfig.ShowArrVistas = showArrVistas;
