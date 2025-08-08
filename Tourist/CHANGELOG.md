@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.13.0.0] - 2025-08-08
+
+### Changed
+- API13 support
+
 ## [1.12.1.2] - 2025-05-23
 
 ### Fixed
@@ -160,7 +165,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Initial release
 
-[unreleased]: https://github.com/foophoof/Tourist/compare/v1.12.1.2...main
+[unreleased]: https://github.com/foophoof/Tourist/compare/v1.13.0.0...main
+[1.13.0.0]: https://github.com/foophoof/Tourist/compare/v1.12.1.2...v1.13.0.0
 [1.12.1.2]: https://github.com/foophoof/Tourist/compare/v1.12.1.1...v1.12.1.2
 [1.12.1.1]: https://github.com/foophoof/Tourist/compare/v1.12.1.0...v1.12.1.1
 [1.12.1.0]: https://github.com/foophoof/Tourist/compare/v1.2.17...v1.12.1.0
