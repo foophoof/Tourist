@@ -1,14 +1,13 @@
-<Project Sdk="Dalamud.NET.Sdk/13.0.0">
+<Project Sdk="Dalamud.NET.Sdk/14.0.1">
 
     <PropertyGroup>
-        <Version>1.13.0.0</Version>
+        <Version>1.14.0.0</Version>
         <PackageLicenseExpression>EUPL-1.2</PackageLicenseExpression>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DalaMock.Host" Version="3.0.0" />
-        <PackageReference Include="DalaMock.Shared" Version="3.0.0" />
+        <PackageReference Include="DalaMock.Host" Version="4.0.0" />
+        <PackageReference Include="DalaMock.Shared" Version="4.0.0" />
         <PackageReference Include="FFXIVWeather.Lumina" Version="2.3.0"/>
     </ItemGroup>
-
 </Project>
