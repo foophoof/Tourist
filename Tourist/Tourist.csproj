@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="DalaMock.Host" Version="4.0.0" />
-        <PackageReference Include="DalaMock.Shared" Version="4.0.0" />
+        <PackageReference Include="DalaMock.Shared" Version="4.0.5" />
         <PackageReference Include="FFXIVWeather.Lumina" Version="2.3.0"/>
     </ItemGroup>
 </Project>

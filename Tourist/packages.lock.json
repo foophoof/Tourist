@@ -17,9 +17,9 @@
       },
       "DalaMock.Shared": {
         "type": "Direct",
-        "requested": "[4.0.0, )",
-        "resolved": "4.0.0",
-        "contentHash": "31CIXD0QkMryDkpFlVZb7otbQh4+kqxgQfzUT9WI87CKXc3/XQYDC9V0kIo5QTd5RHNImLyXABD5xDvY5MC92w==",
+        "requested": "[4.0.5, )",
+        "resolved": "4.0.5",
+        "contentHash": "9fsAF8IiprUcYIPal77mrGouWqexAkvdpDtbL0HH6Ky3C8mCD+6Hcp0pMpii+bsijqVbyp8NauIQ4bWFajRi2g==",
         "dependencies": {
           "Autofac": "9.0.0",
           "Microsoft.Extensions.Hosting": "10.0.1",
